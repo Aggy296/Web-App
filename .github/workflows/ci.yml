@@ -27,7 +27,7 @@ jobs:
         run: npm test --if-present
 
       - name: Build Docker Image
-        run: |g
+        run: |
           docker build -t web-app:${{ github.sha }} .
 
       - name: Login to GHCR
