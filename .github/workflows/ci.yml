@@ -38,5 +38,5 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker tag web-app:${{ github.sha }} ghcr.io/${{ github.repository }}/web-app:${{ github.sha }}
-          docker push ghcr.io/${{ github.repository }}/web-app:${{ github.sha }}
+          docker tag web-app:${{ github.sha }} ghcr.io/${{ github.repository }}:${{ github.sha }}
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
