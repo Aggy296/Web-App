@@ -39,6 +39,7 @@ jobs:
       - name: Validate Shell Script Syntax
         run: |
           bash -n scripts/setup-gke.sh
+          
 
       - name: Validation Complete
         run: echo "Kubernetes manifests and automation scripts validated successfully."
