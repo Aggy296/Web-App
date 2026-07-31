@@ -3,12 +3,11 @@
 CLUSTER_NAME="web-app-cluster"
 ZONE="asia-south1-a"
 
-echo "Checking cluster..."
+echo "Checking if cluster exists..."
 
-gcloud container clusters describe $CLUSTER_NAME --zone $ZONE > /dev/null 2>&1
-
-if [ $? -eq 0 ]; then
-    echo "Cluster already exists"
+if gcloud container clusters describe $CLUSTER_NAME --zone $ZONE >/dev/null 2>&1
+then
+    echo "Cluster already exists."
 else
     echo "Creating cluster..."
     gcloud container clusters create $CLUSTER_NAME \
@@ -17,11 +16,13 @@ else
         --machine-type e2-micro
 fi
 
-echo "Getting credentials..."
+echo "Getting cluster credentials..."
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE
 
 echo "Creating namespaces..."
 kubectl apply -f k8s/namespaces.yml
 
 echo "Applying resource quotas..."
-kubectl apply -f k8s/resourcequota.yaml
+kubectl apply -f k8s/resourcequota.yml
+
+echo "GKE setup completed successfully."
