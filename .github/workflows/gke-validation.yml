@@ -1,0 +1,44 @@
+name: GKE Manifest Validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'k8s/**'
+      - 'scripts/**'
+
+jobs:
+  validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Kubernetes Manifests Exist
+        run: |
+          ls -la k8s
+          test -f k8s/namespaces.yml
+          test -f k8s/resourcequota.yml
+
+      - name: Validate Namespace Manifest
+        run: |
+          grep "kind: Namespace" k8s/namespaces.yml
+
+      - name: Validate ResourceQuota Manifest
+        run: |
+          grep "kind: ResourceQuota" k8s/resourcequota.yml
+
+      - name: Verify GKE Setup Script Exists
+        run: |
+          ls -la scripts
+          test -f scripts/setup-gke.sh
+
+      - name: Validate Shell Script Syntax
+        run: |
+          bash -n scripts/setup-gke.sh
+
+      - name: Validation Complete
+        run: echo "Kubernetes manifests and automation scripts validated successfully."
