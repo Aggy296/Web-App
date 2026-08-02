@@ -1,25 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orders-api
+  name: web-app
   namespace: dev
+
 spec:
-  replicas: 2
+  replicas: 1
 
   selector:
     matchLabels:
-      app: orders-api
+      app: web-app
 
   template:
     metadata:
       labels:
-        app: orders-api
+        app: web-app
 
     spec:
       containers:
-      - name: orders-api
+      - name: web-app
 
-        image: asia-south1-docker.pkg.dev/web-app-poc-504109/webapp-repo/orders-api:v1
+        image: ghcr.io/aggy296/web-app:674cda367c6dc3956d8c31d540d5e99aabc64409
 
         ports:
         - containerPort: 3000
@@ -32,27 +33,9 @@ spec:
             cpu: "50m"
             memory: "64Mi"
 
-        env:
-        - name: APP_ENV
-          valueFrom:
-            configMapKeyRef:
-              name: api-config
-              key: APP_ENV
+        envFrom:
+        - configMapRef:
+            name: web-app-config
 
-        - name: APP_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: api-config
-              key: APP_NAME
-
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: orders-secret
-              key: DB_PASSWORD
-
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: orders-secret
-              key: JWT_SECRET
+        - secretRef:
+            name: web-app-secret
