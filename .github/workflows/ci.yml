@@ -32,6 +32,12 @@ jobs:
         run: npm test --if-present
         working-directory: ./oders-api
 
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+          
       - name: Build Docker Image
         run: |
           docker build -t web-app:${{ github.sha }} ./oders-api
