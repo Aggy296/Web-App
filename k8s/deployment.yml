@@ -20,7 +20,7 @@ spec:
       containers:
       - name: web-app
 
-        image: ghcr.io/aggy296/web-app:674cda367c6dc3956d8c31d540d5e99aabc64409
+        image: ghcr.io/aggy296/web-app:d1b969ca389c73bdaab5735fa390a95b61b46402
 
         ports:
         - containerPort: 3000
