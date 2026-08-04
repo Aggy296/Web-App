@@ -7,6 +7,8 @@ WORKDIR /app
 #copy package files
 COPY package*.json ./
 
+
+
 # Install dependencies
 RUN npm install
 
