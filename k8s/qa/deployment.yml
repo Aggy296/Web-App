@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  namespace: qa
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: web-app
+
+  template:
+    metadata:
+      labels:
+        app: web-app
+
+    spec:
+      containers:
+      - name: web-app
+
+        image: ghcr.io/aggy296/web-app:468db28a50a34a0a4b030866a972417c23ddee6b
+
+        ports:
+        - containerPort: 3000
+
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "16Mi"
+          limits:
+            cpu: "50m"
+            memory: "64Mi"
+
+        envFrom:
+        - configMapRef:
+            name: web-app-config
+
+        - secretRef:
+            name: web-app-secret

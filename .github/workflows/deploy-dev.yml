@@ -1,0 +1,49 @@
+name: Deploy to DEV
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure GKE Credentials
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} \
+          --zone ${{ secrets.GKE_ZONE }} \
+          --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Verify Cluster Connection
+        run: |
+          kubectl get nodes
+
+      - name: Deploy to DEV
+        run: |
+          kubectl apply -f k8s/dev/configmap.yml
+          kubectl apply -f k8s/dev/secret.yml
+          kubectl apply -f k8s/dev/deployment.yml
+          kubectl apply -f k8s/dev/service.yml
+          kubectl apply -f k8s/dev/ingress.yml
+
+      - name: Verify Deployment
+        run: |
+          kubectl get all -n dev

@@ -9,7 +9,8 @@ spec:
   ingressClassName: nginx
 
   rules:
-  - http:
+  - host: dev.webapp.local
+    http:
       paths:
       - path: /
         pathType: Prefix
