@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: web-app-config
+  namespace: uat
+
+data:
+  APP_ENV: uat
+  LOG_LEVEL: info

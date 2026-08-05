@@ -1,0 +1,13 @@
+name: Deploy UAT
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: uat
+    secrets: inherit
