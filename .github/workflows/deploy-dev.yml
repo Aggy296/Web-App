@@ -1,4 +1,4 @@
-name: Deploy to DEV
+name: Deploy DEV
 
 on:
   workflow_run:
@@ -7,47 +7,13 @@ on:
     types:
       - completed
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
 
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Get GKE Credentials
-        uses: google-github-actions/get-gke-credentials@v2
-        with:
-          cluster_name: ${{ secrets.GKE_CLUSTER }}
-          location: ${{ secrets.GKE_ZONE }}
-
-      - name: Verify Cluster Connection
-        run: kubectl get nodes
-
-      - name: Update Deployment Manifest
-        run: |
-          sed -i "s|IMAGE_TAG|${{ github.event.workflow_run.head_sha }}|g" k8s/dev/deployment.yml
-
-
-      - name: Deploy to DEV
-        run: |
-          kubectl apply -f k8s/dev/
-
-      - name: Verify Deployment
-        run: |
-          kubectl get all -n dev
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: dev
+    secrets: inherit

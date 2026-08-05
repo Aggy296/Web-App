@@ -1,0 +1,50 @@
+name: Reusable Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Get GKE Credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER }}
+          location: ${{ secrets.GKE_ZONE }}
+
+      - name: Verify Cluster Connection
+        run: kubectl get nodes
+
+      - name: Update Deployment Manifest
+        run: |
+          sed -i "s|IMAGE_TAG|${{ github.sha }}|g" k8s/${{ inputs.environment }}/deployment.yml
+
+      - name: Deploy
+        run: |
+          kubectl apply -f k8s/${{ inputs.environment }}/
+
+      - name: Verify Deployment
+        run: |
+          kubectl get all -n ${{ inputs.environment }}
