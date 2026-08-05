@@ -1,9 +1,11 @@
 name: Deploy to DEV
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Build and Push Pipeline #(CI Pipeline)
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -11,6 +13,8 @@ permissions:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +38,11 @@ jobs:
 
       - name: Verify Cluster Connection
         run: kubectl get nodes
+
+      - name: Update Deployment Manifest
+        run: |
+          sed -i "s|IMAGE_TAG|${{ github.event.workflow_run.head_sha }}|g" k8s/dev/deployment.yml
+
 
       - name: Deploy to DEV
         run: |
