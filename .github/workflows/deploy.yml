@@ -51,3 +51,12 @@ jobs:
       - name: Verify Deployment
         run: |
           kubectl get all -n ${{ inputs.environment }}
+
+      - name: Smoke Test
+        run: |
+          curl -f http://34.14.168.137/health
+
+      - name: Rollback On Failure
+        if: failure()
+        run: |
+          kubectl rollout undo deployment/web-app -n ${{ inputs.environment }}
