@@ -54,7 +54,10 @@ jobs:
 
       - name: Smoke Test
         run: |
-          curl -f http://34.14.168.137/health
+          curl -f \
+            -H "Host: ${{ inputs.environment }}.webapp.local" \
+            http://34.14.168.137/health 
+            
 
       - name: Rollback On Failure
         if: failure()
