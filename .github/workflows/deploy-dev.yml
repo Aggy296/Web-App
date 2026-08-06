@@ -1,18 +1,12 @@
 name: Deploy DEV
 
 on:
-  workflow_run:
-    workflows:
-      - Build and Push Pipeline #(CI Pipeline)
-    types:
-      - completed
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_branch == 'main'
-
     uses: ./.github/workflows/deploy.yml
     with:
       environment: dev
