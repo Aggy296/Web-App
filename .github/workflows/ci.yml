@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'oders-api/**'
-    #   - '.github/workflows/ci.yml'
+    paths:
+       - 'oders-api/**'
+       - 'k8s/**'
+       - '.github/workflows/ci.yml'
 
 jobs:
   build:
