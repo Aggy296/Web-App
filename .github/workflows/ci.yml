@@ -40,7 +40,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-          
+        
       - name: Build Docker Image
         run: |
           docker build -t web-app:${{ github.sha }} ./oders-api
