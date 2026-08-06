@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'oders-api/**'
-      - '.github/workflows/ci.yml'
+    # paths:
+    #   - 'oders-api/**'
+    #   - '.github/workflows/ci.yml'
 
 jobs:
   build:
@@ -40,7 +40,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-        
       - name: Build Docker Image
         run: |
           docker build -t web-app:${{ github.sha }} ./oders-api
