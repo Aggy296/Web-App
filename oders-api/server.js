@@ -1,5 +1,8 @@
-require('./instrumentation');
-
+try {
+  require('./instrumentation');
+} catch (err) {
+  console.log('OpenTelemetry not loaded');
+}
 const express = require('express');
 
 const app = express();
