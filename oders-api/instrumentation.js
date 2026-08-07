@@ -1,3 +1,5 @@
+console.log('OpenTelemetry Initializing...');
+
 const { NodeSDK } = require('@opentelemetry/sdk-node');
 const {
   getNodeAutoInstrumentations,
@@ -8,3 +10,5 @@ const sdk = new NodeSDK({
 });
 
 sdk.start();
+
+console.log('OpenTelemetry Started');
