@@ -1,0 +1,10 @@
+clusterName: web-app-cluster
+
+splunkObservability:
+  accessToken: zbYAJ1fh3q0hQCYBOlFF2ghelm
+  realm: sg0
+
+logsEnabled: true
+
+hostMonitoring:
+  enabled: false

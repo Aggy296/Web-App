@@ -33,6 +33,16 @@ spec:
             cpu: "50m"
             memory: "64Mi"
 
+        env:
+        - name: OTEL_SERVICE_NAME
+          value: web-app
+
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://splunk-otel-collector-agent.observability.svc.cluster.local:4318
+
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: deployment.environment=prod    
+
         envFrom:
         - configMapRef:
             name: web-app-config
