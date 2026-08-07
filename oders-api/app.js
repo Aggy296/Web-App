@@ -29,7 +29,7 @@
 // app.listen(PORT, () => {
 //     console.log(`Orders API running on ${PORT}`);
 // });
-
+require('./instrumentation');
 const app = require('./server');
 
 app.listen(3000, () => {

@@ -1,9 +1,3 @@
-try {
-  require('./instrumentation');
-} catch {
-  console.log('OpenTelemetry disabled');
-}
-
 const express = require('express');
 
 const app = express();
