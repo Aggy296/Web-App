@@ -7,10 +7,12 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/orders', (req, res) => {
-    res.json([
-        { id: 1, item: 'Laptop' },
-        { id: 2, item: 'Mouse' }
-    ]);
+  console.log('Orders endpoint called');
+
+  res.json([
+    { id: 1, item: 'Laptop' },
+    { id: 2, item: 'Mouse' }
+  ]);
 });
 
 module.exports = app;
