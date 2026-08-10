@@ -4,7 +4,27 @@ splunkObservability:
   accessToken: zbYAJ1fh3q0hQCYBOlFF2ghelm
   realm: sg0
 
-logsEnabled: true
+splunkPlatform:
+  logsEnabled: true
 
-hostMonitoring:
-  enabled: false
+agent:
+  enabled: true
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+clusterReceiver:
+  nodeSelector:
+    workload: observability
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi
+  tolerations: []
