@@ -55,7 +55,21 @@ jobs:
       - name: Smoke Test
         run: |
           kubectl rollout status deployment/web-app -n ${{ inputs.environment }} --timeout=180s
-          kubectl exec -n ${{ inputs.environment }} deploy/web-app -- wget -qO- http://127.0.0.1:3000/health
+
+          for i in $(seq 1 12); do
+            if kubectl exec -n ${{ inputs.environment }} deploy/web-app -- wget -qO- http://127.0.0.1:3000/health >/tmp/health.txt 2>/dev/null; then
+              cat /tmp/health.txt
+              exit 0
+            fi
+            echo "Health check failed, retrying in 5s..."
+            sleep 5
+          done
+
+          echo "---- Pod events ----"
+          kubectl describe pod -n ${{ inputs.environment }} -l app=web-app || true
+          echo "---- App logs ----"
+          kubectl logs -n ${{ inputs.environment }} deployment/web-app --tail=200 || true
+          exit 1
 
 
       - name: Rollback On Failure
