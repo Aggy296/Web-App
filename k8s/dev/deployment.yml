@@ -40,8 +40,20 @@ spec:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://splunk-otel-collector-agent.observability.svc.cluster.local:4318
 
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: http/protobuf
+
+        - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+          value: http://splunk-otel-collector-agent.observability.svc.cluster.local:4318/v1/traces
+
+        - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+          value: http://splunk-otel-collector-agent.observability.svc.cluster.local:4318/v1/metrics
+
+        - name: OTEL_EXPORTER_OTLP_LOGS_ENDPOINT
+          value: http://splunk-otel-collector-agent.observability.svc.cluster.local:4318/v1/logs
+
         - name: OTEL_RESOURCE_ATTRIBUTES
-          value: deployment.environment=dev
+          value: service.name=web-app,deployment.environment=dev
 
         envFrom:
         - configMapRef:

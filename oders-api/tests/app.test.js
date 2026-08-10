@@ -17,4 +17,12 @@ describe('API Tests', () => {
         expect(response.body.length).toBeGreaterThan(0);
     });
 
+    test('Instrumentation should route console logs through OTEL', () => {
+        jest.resetModules();
+        delete require.cache[require.resolve('../instrumentation')];
+        require('../instrumentation');
+
+        expect(console.log.__otelWrapped).toBe(true);
+    });
+
 });
