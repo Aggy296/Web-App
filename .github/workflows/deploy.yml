@@ -54,9 +54,8 @@ jobs:
 
       - name: Smoke Test
         run: |
-          curl -f \
-            -H "Host: ${{ inputs.environment }}.webapp.local" \
-            http://34.14.168.137/health 
+          kubectl run curltest --rm -it --restart=Never --image=curlimages/curl:latest -- \
+            sh -c "curl -fsS http://web-app.${{ inputs.environment }}.svc.cluster.local:3000/health" 
             
 
       - name: Rollback On Failure
