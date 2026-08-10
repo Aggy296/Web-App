@@ -54,7 +54,7 @@ jobs:
 
       - name: Smoke Test
         run: |
-          kubectl run curltest --rm -it --restart=Never --image=curlimages/curl:latest -- \
+          kubectl run curltest-$(date +%s) --rm -it --restart=Never --image=curlimages/curl:latest -- \
             sh -c "curl -fsS http://web-app-service.${{ inputs.environment }}.svc.cluster.local/health"
 
             
